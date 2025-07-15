@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,6 +7,7 @@ import Welcome from "./pages/Welcome";
 import Home from "./pages/Home";
 import Chat from "./pages/Chat";
 import MoodTracker from "./pages/MoodTracker";
+import TaskManagement from "./pages/TaskManagement";
 import Settings from "./pages/Settings";
 import Premium from "./pages/Premium";
 import NotFound from "./pages/NotFound";
@@ -26,6 +26,7 @@ const App = () => (
             <Route path="/home" element={<Home />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/mood-tracker" element={<MoodTracker />} />
+            <Route path="/task-management" element={<TaskManagement />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/premium" element={<Premium />} />
             <Route path="*" element={<NotFound />} />
