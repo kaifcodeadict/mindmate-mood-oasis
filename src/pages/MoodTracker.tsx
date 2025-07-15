@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -10,6 +9,16 @@ import TaskCard from "@/components/TaskCard";
 import MoodChart from "@/components/MoodChart";
 import StreakCounter from "@/components/StreakCounter";
 import EmotionalSummary from "@/components/EmotionalSummary";
+
+interface Task {
+  id: string;
+  title: string;
+  description: string;
+  type: 'breathing' | 'journaling' | 'mindfulness' | 'movement';
+  status: 'pending' | 'in-progress' | 'completed';
+  emoji: string;
+  estimatedTime: string;
+}
 
 const MoodTracker = () => {
   const navigate = useNavigate();
@@ -26,12 +35,12 @@ const MoodTracker = () => {
     { day: 'Sun', mood: 'calm', emoji: '😌', value: 75 }
   ];
 
-  const [dailyTask, setDailyTask] = useState({
+  const [dailyTask, setDailyTask] = useState<Task>({
     id: '1',
     title: 'Mindful Breathing',
     description: 'Take 5 minutes to practice deep breathing. Focus on your breath and let go of any tension.',
-    type: 'breathing' as const,
-    status: 'pending' as const,
+    type: 'breathing',
+    status: 'pending',
     emoji: '🌸',
     estimatedTime: '5 minutes'
   });
