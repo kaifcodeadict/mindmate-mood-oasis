@@ -5,16 +5,28 @@ import { useNavigate } from "react-router-dom";
 import { useUser, SignInButton, SignUpButton } from "@clerk/clerk-react";
 import { Heart, Sparkles, Moon, Sun, Flower2, Cloud, Star, Mail } from "lucide-react";
 import { useEffect } from "react";
+import { useAuth } from "@clerk/clerk-react";
 
 const Welcome = () => {
   const navigate = useNavigate();
   const { isSignedIn, isLoaded } = useUser();
+  const { getToken } = useAuth();
 
   useEffect(() => {
-    if (isLoaded && isSignedIn) {
-      navigate("/home");
-    }
-  }, [isSignedIn, isLoaded, navigate]);
+    const handleAuth = async () => {
+      if (isLoaded && isSignedIn) {
+        // Fetch and store the latest token
+        const token = await getToken();
+        if (token) {
+          localStorage.setItem("clerkToken", token);
+        }
+        navigate("/home");
+      } else {
+        localStorage.removeItem("clerkToken");
+      }
+    };
+    handleAuth();
+  }, [isSignedIn, isLoaded, navigate, getToken]);
 
   if (!isLoaded) {
     return (
@@ -65,7 +77,7 @@ const Welcome = () => {
             <div className="absolute inset-0 w-32 h-32 mx-auto rounded-full border-2 border-primary/15 animate-pulse-soft"></div>
             <div className="absolute inset-3 w-26 h-26 mx-auto rounded-full border border-primary/10 animate-pulse-soft" style={{ animationDelay: '1s' }}></div>
           </div>
-          
+
           <div className="space-y-4">
             <h1 className="text-5xl font-display text-wellness">MindMate</h1>
             <div className="flex items-center justify-center gap-3 text-muted-foreground">
@@ -123,7 +135,7 @@ const Welcome = () => {
               <Sparkles className="w-5 h-5 text-accent" />
             </div>
           </div>
-          
+
           <div className="space-y-6 relative z-10">
             <div className="flex justify-center gap-4">
               {[
@@ -133,7 +145,7 @@ const Welcome = () => {
                 { emoji: '😰', color: 'from-orange-200/40 to-orange-300/30', delay: '0.6s', label: 'Unsettled' },
                 { emoji: '😴', color: 'from-indigo-200/40 to-indigo-300/30', delay: '0.8s', label: 'Restful' }
               ].map((mood, index) => (
-                <div 
+                <div
                   key={mood.emoji}
                   className={`w-14 h-14 rounded-full bg-gradient-to-br ${mood.color} flex items-center justify-center text-xl animate-bounce-subtle hover:scale-125 transition-all duration-300 cursor-pointer shadow-md hover:shadow-lg relative overflow-hidden group`}
                   style={{ animationDelay: mood.delay }}

@@ -1,52 +1,70 @@
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useNavigate } from "react-router-dom";
-import { MessageCircle, TrendingUp, Settings, Home as HomeIcon, BarChart3, Heart, Sparkles, Star, Crown, Calendar, BookOpen } from "lucide-react";
+import { MessageCircle, TrendingUp, Settings, Home as HomeIcon, BarChart3, Heart, Sparkles, Star, Crown, Calendar, BookOpen, LogOut } from "lucide-react";
 import { useState } from "react";
+import { SignOutButton, useClerk } from "@clerk/clerk-react";
+import {  UserButton } from '@clerk/clerk-react';
+import axiosInstance from "@/lib/axios";
+import { useEffect } from "react";
 
 const Home = () => {
   const navigate = useNavigate();
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
-  
+  const { signOut } = useClerk();
+
+
+
+  useEffect(() => {
+    axiosInstance.post("/auth/sync-user")
+      .then(response => {
+        // Optionally handle response
+        console.log("User synced:", response.data);
+      })
+      .catch(error => {
+        // Optionally handle error
+        console.error("Sync user error:", error);
+      });
+  }, []);
+
   const moods = [
-    { 
-      emoji: '😊', 
-      label: 'Joyful', 
+    {
+      emoji: '😊',
+      label: 'Joyful',
       value: 'happy',
       gradient: 'from-yellow-200/60 via-yellow-300/50 to-yellow-400/40',
       shadowColor: 'shadow-joy',
       description: 'Feeling bright and positive'
     },
-    { 
-      emoji: '😌', 
-      label: 'Peaceful', 
+    {
+      emoji: '😌',
+      label: 'Peaceful',
       value: 'calm',
       gradient: 'from-blue-200/60 via-blue-300/50 to-blue-400/40',
       shadowColor: 'shadow-calm',
       description: 'Centered and balanced'
     },
-    { 
-      emoji: '😔', 
-      label: 'Tender', 
+    {
+      emoji: '😔',
+      label: 'Tender',
       value: 'sad',
       gradient: 'from-purple-200/60 via-purple-300/50 to-purple-400/40',
       shadowColor: 'shadow-wellness',
       description: 'Gentle and reflective'
     },
-    { 
-      emoji: '😰', 
-      label: 'Unsettled', 
+    {
+      emoji: '😰',
+      label: 'Unsettled',
       value: 'anxious',
       gradient: 'from-orange-200/60 via-orange-300/50 to-orange-400/40',
       shadowColor: 'shadow-joy',
       description: 'Seeking comfort and care'
     },
-    { 
-      emoji: '😴', 
-      label: 'Restful', 
+    {
+      emoji: '😴',
+      label: 'Restful',
       value: 'tired',
       gradient: 'from-indigo-200/60 via-indigo-300/50 to-indigo-400/40',
       shadowColor: 'shadow-calm',
@@ -57,14 +75,23 @@ const Home = () => {
   const handleMoodSelect = (mood: string) => {
     setSelectedMood(mood);
     setIsAnimating(true);
-    
+
     setTimeout(() => {
       navigate("/chat", { state: { mood } });
     }, 1000);
   };
 
+  const handleSignOut = () => {
+    signOut(() => navigate("/"));
+  };
+
   return (
     <div className="min-h-screen bg-gradient-serenity relative overflow-hidden">
+      {/* Clerk Logout Button */}
+      <div className="absolute top-4 right-4 flex items-center gap-2 flex-row">
+        <UserButton />
+      </div>
+
       {/* Enhanced floating background elements */}
       <div className="floating-element top-20 right-16 animate-float-gentle">
         <Heart className="w-10 h-10 text-primary/20" fill="currentColor" />
@@ -102,7 +129,7 @@ const Home = () => {
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="wellness-card p-8 border-2 border-primary/10">
                     <div className="text-center space-y-3">
                       <h2 className="text-2xl font-heading text-foreground">
@@ -126,14 +153,14 @@ const Home = () => {
                         className={`mood-bubble aspect-square flex flex-col items-center justify-center gap-4 p-6 relative overflow-hidden transition-all duration-500 ${
                           selectedMood === mood.value ? 'selected' : ''
                         } ${mood.shadowColor}`}
-                        style={{ 
+                        style={{
                           animationDelay: `${index * 0.1}s`,
                         }}
                       >
                         <div className={`absolute inset-0 bg-gradient-to-br ${mood.gradient} opacity-0 transition-opacity duration-500 ${
                           selectedMood === mood.value ? 'opacity-30' : 'hover:opacity-20'
                         }`} />
-                        
+
                         <span className="text-4xl relative z-10 animate-bounce-subtle" style={{ animationDelay: `${index * 0.3}s` }}>
                           {mood.emoji}
                         </span>
@@ -145,7 +172,7 @@ const Home = () => {
                             {mood.description}
                           </span>
                         </div>
-                        
+
                         {selectedMood === mood.value && (
                           <div className="absolute inset-0 rounded-3xl border-2 border-primary animate-pulse-soft" />
                         )}
@@ -171,7 +198,7 @@ const Home = () => {
                       </div>
                     </div>
                   </Button>
-                  
+
                   <Button
                     variant="outline"
                     onClick={() => navigate("/mood-tracker")}
@@ -197,7 +224,7 @@ const Home = () => {
                   <div className="absolute top-6 right-6">
                     <Heart className="w-8 h-8 text-success/40 animate-heart-beat-gentle" fill="currentColor" />
                   </div>
-                  
+
                   <div className="space-y-6">
                     <div className="space-y-3">
                       <div className="flex items-center gap-3">
@@ -210,7 +237,7 @@ const Home = () => {
                         Your emotional journey is blossoming beautifully this week 🌱
                       </p>
                     </div>
-                    
+
                     <div className="space-y-4">
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground font-body">Wellness Journey</span>
@@ -240,7 +267,7 @@ const Home = () => {
                 <div className="space-y-4">
                   <h4 className="font-heading text-foreground">Quick Actions</h4>
                   <div className="space-y-3">
-                    <button 
+                    <button
                       onClick={() => navigate("/mood-tracker")}
                       className="w-full wellness-card p-4 text-left interactive-element group"
                     >
@@ -249,8 +276,8 @@ const Home = () => {
                         <span className="font-body text-foreground">View mood calendar</span>
                       </div>
                     </button>
-                    
-                    <button 
+
+                    <button
                       onClick={() => navigate("/settings")}
                       className="w-full wellness-card p-4 text-left interactive-element group"
                     >
@@ -282,7 +309,7 @@ const Home = () => {
                   </p>
                 </div>
               </div>
-              
+
               <div className="wellness-card p-6 border-2 border-primary/10">
                 <div className="text-center space-y-2">
                   <h2 className="text-lg font-heading text-foreground">
@@ -306,21 +333,21 @@ const Home = () => {
                     className={`mood-bubble aspect-square flex flex-col items-center justify-center gap-2 relative overflow-hidden ${
                       selectedMood === mood.value ? 'selected' : ''
                     } ${mood.shadowColor}`}
-                    style={{ 
+                    style={{
                       animationDelay: `${index * 0.1}s`,
                     }}
                   >
                     <div className={`absolute inset-0 bg-gradient-to-br ${mood.gradient} opacity-0 transition-opacity duration-300 ${
                       selectedMood === mood.value ? 'opacity-25' : 'hover:opacity-15'
                     }`} />
-                    
+
                     <span className="text-2xl relative z-10 animate-bounce-subtle" style={{ animationDelay: `${index * 0.2}s` }}>
                       {mood.emoji}
                     </span>
                     <span className="text-xs text-muted-foreground font-body font-medium relative z-10">
                       {mood.label}
                     </span>
-                    
+
                     {selectedMood === mood.value && (
                       <div className="absolute inset-0 rounded-3xl border-2 border-primary animate-pulse-soft" />
                     )}
@@ -347,7 +374,7 @@ const Home = () => {
                     </div>
                   </div>
                 </Button>
-                
+
                 <Button
                   variant="outline"
                   onClick={() => navigate("/mood-tracker")}
@@ -372,7 +399,7 @@ const Home = () => {
                 <div className="absolute top-4 right-4">
                   <Heart className="w-6 h-6 text-success/30 animate-heart-beat-gentle" fill="currentColor" />
                 </div>
-                
+
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
@@ -385,7 +412,7 @@ const Home = () => {
                       Your emotional journey is blossoming beautifully 🌱
                     </p>
                   </div>
-                  
+
                   <div className="space-y-3">
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground font-body">Mood Journey</span>
@@ -421,8 +448,8 @@ const Home = () => {
                   </div>
                   <span className="text-xs font-body text-primary">Home</span>
                 </button>
-                
-                <button 
+
+                <button
                   onClick={() => navigate("/chat")}
                   className="flex flex-col items-center gap-1 p-2 group interactive-element"
                 >
@@ -431,8 +458,8 @@ const Home = () => {
                   </div>
                   <span className="text-xs font-body text-muted-foreground group-hover:text-primary transition-colors">Chat</span>
                 </button>
-                
-                <button 
+
+                <button
                   onClick={() => navigate("/mood-tracker")}
                   className="flex flex-col items-center gap-1 p-2 group interactive-element"
                 >
@@ -441,8 +468,8 @@ const Home = () => {
                   </div>
                   <span className="text-xs font-body text-muted-foreground group-hover:text-secondary transition-colors">Stats</span>
                 </button>
-                
-                <button 
+
+                <button
                   onClick={() => navigate("/settings")}
                   className="flex flex-col items-center gap-1 p-2 group interactive-element"
                 >

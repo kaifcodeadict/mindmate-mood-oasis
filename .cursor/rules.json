@@ -1,0 +1,48 @@
+
+{
+    "ignore": [
+      "node_modules/",
+      "dist/",
+      "build/",
+      "bun.lockb",
+      "package-lock.json",
+      ".git/",
+      ".DS_Store"
+    ],
+    "testFilePatterns": [
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/__tests__/**/*.ts",
+      "**/__tests__/**/*.tsx"
+    ],
+    "componentFilePatterns": [
+      "src/components/**/*.tsx"
+    ],
+    "pageFilePatterns": [
+      "src/pages/**/*.tsx"
+    ],
+    "styleFilePatterns": [
+      "src/**/*.css",
+      "src/**/*.scss",
+      "src/**/*.sass",
+      "src/**/*.less"
+    ],
+    "entryFilePatterns": [
+      "src/main.tsx",
+      "src/index.tsx"
+    ],
+    "configFilePatterns": [
+      "*.config.js",
+      "*.config.ts",
+      "tsconfig*.json",
+      "vite.config.ts"
+    ],
+    "libFilePatterns": [
+      "src/lib/**/*.ts",
+      "src/lib/**/*.tsx"
+    ],
+    "hookFilePatterns": [
+      "src/hooks/**/*.ts",
+      "src/hooks/**/*.tsx"
+    ]
+  }
