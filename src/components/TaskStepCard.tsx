@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { CheckCircle, Circle } from "lucide-react";
 
 interface TaskStep {
-  id: string;
+  id: number;
   title: string;
   description: string;
   completed: boolean;
