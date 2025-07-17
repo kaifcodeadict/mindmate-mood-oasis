@@ -2,10 +2,17 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
+import { useUser, useClerk } from "@clerk/clerk-react";
 import { ArrowLeft, User, Crown, HelpCircle, MessageSquare, LogOut, Bell, Palette } from "lucide-react";
 
 const Settings = () => {
   const navigate = useNavigate();
+  const { user } = useUser();
+  const { signOut } = useClerk();
+  
+  const handleSignOut = () => {
+    signOut(() => navigate("/"));
+  };
   
   const settingsItems = [
     {
@@ -77,12 +84,24 @@ const Settings = () => {
         <Card className="p-6 bg-gradient-to-r from-primary/5 to-secondary/5">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-              <span className="text-2xl">😊</span>
+              {user?.imageUrl ? (
+                <img 
+                  src={user.imageUrl} 
+                  alt="Profile" 
+                  className="w-full h-full rounded-full object-cover"
+                />
+              ) : (
+                <span className="text-2xl">😊</span>
+              )}
             </div>
             
             <div className="flex-1">
-              <h3 className="font-semibold text-foreground">Welcome Friend!</h3>
-              <p className="text-sm text-muted-foreground">friend@example.com</p>
+              <h3 className="font-semibold text-foreground">
+                Welcome {user?.firstName || "Friend"}!
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                {user?.primaryEmailAddress?.emailAddress || "friend@example.com"}
+              </p>
               <div className="flex items-center gap-2 mt-1">
                 <div className="px-2 py-1 bg-background/50 rounded-full">
                   <span className="text-xs text-muted-foreground">Free Plan</span>
@@ -127,7 +146,7 @@ const Settings = () => {
         {/* Logout */}
         <Card className="p-4 border-destructive/20">
           <button 
-            onClick={() => navigate("/")}
+            onClick={handleSignOut}
             className="w-full flex items-center gap-4 text-left"
           >
             <div className="w-10 h-10 rounded-2xl bg-destructive/10 flex items-center justify-center">

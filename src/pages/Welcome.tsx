@@ -2,14 +2,30 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { Heart, Sparkles, Moon, Sun, Flower2, Cloud, Star } from "lucide-react";
+import { useUser, SignInButton, SignUpButton } from "@clerk/clerk-react";
+import { Heart, Sparkles, Moon, Sun, Flower2, Cloud, Star, Mail } from "lucide-react";
+import { useEffect } from "react";
 
 const Welcome = () => {
   const navigate = useNavigate();
+  const { isSignedIn, isLoaded } = useUser();
 
-  const handleGetStarted = () => {
-    navigate("/home");
-  };
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      navigate("/home");
+    }
+  }, [isSignedIn, isLoaded, navigate]);
+
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen bg-gradient-serenity flex items-center justify-center">
+        <div className="animate-pulse text-center">
+          <Heart className="w-16 h-16 text-primary mx-auto mb-4" fill="currentColor" />
+          <p className="text-muted-foreground">Loading MindMate...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-serenity flex flex-col items-center justify-center p-6 relative overflow-hidden">
@@ -77,25 +93,23 @@ const Welcome = () => {
           </div>
         </div>
 
-        {/* Enhanced action buttons */}
-        <div className="space-y-6">
-          <Button 
-            onClick={handleGetStarted}
-            className="w-full bg-gradient-to-r from-primary via-primary/95 to-secondary hover:from-primary/90 hover:via-primary/85 hover:to-secondary/90 text-white rounded-full py-8 text-xl font-heading shadow-wellness transition-all duration-500 hover:shadow-xl hover:scale-[1.02] interactive-element relative overflow-hidden"
-          >
-            {/* Subtle shimmer effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer-soft"></div>
-            <Heart className="w-6 h-6 mr-3 relative z-10" fill="currentColor" />
-            <span className="relative z-10">Begin Your Journey</span>
-            <Sparkles className="w-6 h-6 ml-3 relative z-10" />
-          </Button>
-          
-          <button 
-            onClick={() => navigate("/home")}
-            className="text-muted-foreground hover:text-primary transition-colors text-base font-body hover:scale-105 transform duration-300 interactive-element"
-          >
-            I already have an account →
-          </button>
+        {/* Authentication buttons */}
+        <div className="space-y-4">
+          <SignUpButton fallbackRedirectUrl="/home">
+            <Button className="w-full bg-gradient-to-r from-primary via-primary/95 to-secondary hover:from-primary/90 hover:via-primary/85 hover:to-secondary/90 text-white rounded-full py-8 text-xl font-heading shadow-wellness transition-all duration-500 hover:shadow-xl hover:scale-[1.02] interactive-element relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer-soft"></div>
+              <Heart className="w-6 h-6 mr-3 relative z-10" fill="currentColor" />
+              <span className="relative z-10">Create Account</span>
+              <Sparkles className="w-6 h-6 ml-3 relative z-10" />
+            </Button>
+          </SignUpButton>
+
+          <SignInButton fallbackRedirectUrl="/home">
+            <Button variant="outline" className="w-full rounded-full py-6 text-lg font-heading border-primary/30 hover:bg-primary/5 hover:border-primary/50 transition-all duration-300">
+              <Mail className="w-5 h-5 mr-2" />
+              Sign In
+            </Button>
+          </SignInButton>
         </div>
 
         {/* Enhanced mood preview with deeper personality */}
