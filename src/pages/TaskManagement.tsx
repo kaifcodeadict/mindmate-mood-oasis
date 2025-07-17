@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -20,6 +21,7 @@ import MotivationalQuote from "@/components/MotivationalQuote";
 // Define interfaces for task steps
 interface TaskStep {
   id: number;
+  title: string;
   description: string;
   completed: boolean;
 }
@@ -48,7 +50,7 @@ const TaskManagement = () => {
   const navigate = useNavigate();
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [taskCompleted, setTaskCompleted] = useState(false);
-  const [activeDate, setActiveDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
   const [completedSteps, setCompletedSteps] = useState(0);
 
@@ -70,10 +72,10 @@ const TaskManagement = () => {
       title: "Deep Breathing Exercise",
       description: "Practice deep breathing to calm your mind and reduce stress.",
       steps: [
-        { id: 1, description: "Inhale deeply through your nose for 4 seconds.", completed: false },
-        { id: 2, description: "Hold your breath for 6 seconds.", completed: false },
-        { id: 3, description: "Exhale slowly through your mouth for 8 seconds.", completed: false },
-        { id: 4, description: "Repeat the cycle 5 times.", completed: false },
+        { id: 1, title: "Inhale deeply", description: "Inhale deeply through your nose for 4 seconds.", completed: false },
+        { id: 2, title: "Hold your breath", description: "Hold your breath for 6 seconds.", completed: false },
+        { id: 3, title: "Exhale slowly", description: "Exhale slowly through your mouth for 8 seconds.", completed: false },
+        { id: 4, title: "Repeat the cycle", description: "Repeat the cycle 5 times.", completed: false },
       ],
       icon: Heart,
       color: "text-red-500",
@@ -83,9 +85,9 @@ const TaskManagement = () => {
       title: "Gratitude Journaling",
       description: "Reflect on the things you're grateful for to boost your mood.",
       steps: [
-        { id: 1, description: "Find a quiet space where you can relax.", completed: false },
-        { id: 2, description: "Think about three things you are grateful for today.", completed: false },
-        { id: 3, description: "Write each item in your journal, describing why you appreciate it.", completed: false },
+        { id: 1, title: "Find quiet space", description: "Find a quiet space where you can relax.", completed: false },
+        { id: 2, title: "Think of gratitude", description: "Think about three things you are grateful for today.", completed: false },
+        { id: 3, title: "Write in journal", description: "Write each item in your journal, describing why you appreciate it.", completed: false },
       ],
       icon: Calendar,
       color: "text-blue-500",
@@ -95,10 +97,10 @@ const TaskManagement = () => {
       title: "Mindful Meditation",
       description: "Engage in a short meditation to increase awareness and focus.",
       steps: [
-        { id: 1, description: "Sit comfortably with your eyes closed.", completed: false },
-        { id: 2, description: "Focus on your breath as it enters and leaves your body.", completed: false },
-        { id: 3, description: "When your mind wanders, gently redirect your attention back to your breath.", completed: false },
-        { id: 4, description: "Continue for 5-10 minutes.", completed: false },
+        { id: 1, title: "Sit comfortably", description: "Sit comfortably with your eyes closed.", completed: false },
+        { id: 2, title: "Focus on breath", description: "Focus on your breath as it enters and leaves your body.", completed: false },
+        { id: 3, title: "Redirect attention", description: "When your mind wanders, gently redirect your attention back to your breath.", completed: false },
+        { id: 4, title: "Continue meditation", description: "Continue for 5-10 minutes.", completed: false },
       ],
       icon: Flame,
       color: "text-orange-500",
@@ -108,9 +110,9 @@ const TaskManagement = () => {
       title: "Gentle Movement",
       description: "Engage in light physical activity to energize your body and mind.",
       steps: [
-        { id: 1, description: "Stand up and stretch your arms overhead.", completed: false },
-        { id: 2, description: "Gently twist your torso from side to side.", completed: false },
-        { id: 3, description: "Walk around your space for a few minutes.", completed: false },
+        { id: 1, title: "Stretch arms", description: "Stand up and stretch your arms overhead.", completed: false },
+        { id: 2, title: "Twist torso", description: "Gently twist your torso from side to side.", completed: false },
+        { id: 3, title: "Walk around", description: "Walk around your space for a few minutes.", completed: false },
       ],
       icon: Trophy,
       color: "text-green-500",
@@ -151,8 +153,8 @@ const TaskManagement = () => {
     }
   };
 
-  const handleDateSelect = (date: Date) => {
-    setActiveDate(date);
+  const handleDateSelect = (date: Date | undefined) => {
+    setSelectedDate(date);
     setShowCalendar(false);
   };
 
@@ -161,7 +163,7 @@ const TaskManagement = () => {
     return taskHistory[dateString];
   };
 
-  const completionStatus = getTaskCompletionStatus(activeDate);
+  const completionStatus = selectedDate ? getTaskCompletionStatus(selectedDate) : null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -179,7 +181,7 @@ const TaskManagement = () => {
         <div>
           <h2 className="font-semibold text-foreground">Today's Focus</h2>
           <p className="text-sm text-muted-foreground">
-            {activeDate.toLocaleDateString()}
+            {selectedDate?.toLocaleDateString()}
           </p>
         </div>
       </div>
@@ -204,7 +206,7 @@ const TaskManagement = () => {
 
           {showCalendar && (
             <TaskCalendarView
-              activeDate={activeDate}
+              selectedDate={selectedDate}
               onDateSelect={handleDateSelect}
               taskHistory={taskHistory}
             />
@@ -263,11 +265,12 @@ const TaskManagement = () => {
 
           {/* Task Steps */}
           <div className="space-y-3">
-            {currentTask.steps.map((step) => (
+            {currentTask.steps.map((step, index) => (
               <TaskStepCard
                 key={step.id}
                 step={step}
-                onComplete={handleStepComplete}
+                stepNumber={index + 1}
+                onToggle={() => handleStepComplete(step.id)}
               />
             ))}
           </div>
