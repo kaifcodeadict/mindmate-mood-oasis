@@ -6,7 +6,6 @@ import { MessageCircle, TrendingUp, Settings, Home as HomeIcon, BarChart3, Heart
 import { useState } from "react";
 import { SignOutButton, useClerk } from "@clerk/clerk-react";
 import {  UserButton } from '@clerk/clerk-react';
-import axiosInstance from "@/lib/axios";
 import { useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
 const Home = () => {
@@ -17,17 +16,7 @@ const Home = () => {
   const { user } = useUser();
 
 
-  useEffect(() => {
-    axiosInstance.post("/auth/sync-user")
-      .then(response => {
-        // Optionally handle response
-        console.log("User synced:", response.data);
-      })
-      .catch(error => {
-        // Optionally handle error
-        console.error("Sync user error:", error);
-      });
-  }, []);
+
 
   const moods = [
     {

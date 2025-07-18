@@ -4,13 +4,31 @@ import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { useUser, SignInButton, SignUpButton } from "@clerk/clerk-react";
 import { Heart, Sparkles, Shield, Users, Brain, ArrowRight, Mail, Star } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/clerk-react";
+import axiosInstance from "@/lib/axios";
+import Loader from "@/components/Loader";
 
 const Welcome = () => {
   const navigate = useNavigate();
   const { isSignedIn, isLoaded } = useUser();
   const { getToken } = useAuth();
+  const [loading, setLoading] = useState(true);
+
+  const saveData = async () => {
+    try {
+      await axiosInstance.post("/auth/sync-user");
+      // Optionally handle response
+      navigate("/onboarding");
+      // navigate("/home");
+    } catch (error) {
+      // Optionally handle error
+      alert("Error syncing user");
+      navigate("/");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const handleAuth = async () => {
@@ -20,7 +38,10 @@ const Welcome = () => {
         if (token) {
           localStorage.setItem("clerkToken", token);
         }
-        navigate("/home");
+        setLoading(true);
+        setTimeout(() => {
+          saveData();
+        }, 500);
       } else {
         localStorage.removeItem("clerkToken");
       }
@@ -28,16 +49,11 @@ const Welcome = () => {
     handleAuth();
   }, [isSignedIn, isLoaded, navigate, getToken]);
 
-  if (!isLoaded) {
-    return (
-      <div className="min-h-screen bg-gradient-serenity flex items-center justify-center">
-        <div className="animate-pulse text-center">
-          <Heart className="w-16 h-16 text-primary mx-auto mb-4" fill="currentColor" />
-          <p className="text-muted-foreground">Loading MindMate...</p>
-        </div>
-      </div>
-    );
+  if (loading || !isLoaded) {
+    return <Loader message="Getting your MindMate experience ready..." />;
   }
+
+
 
   return (
     <div className="min-h-screen bg-gradient-serenity relative overflow-hidden">

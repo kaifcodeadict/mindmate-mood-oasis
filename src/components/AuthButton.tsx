@@ -17,7 +17,7 @@ const AuthButton = ({ variant = "user", className = "" }: AuthButtonProps) => {
         <span className="text-sm text-muted-foreground hidden sm:block">
           Hello, {user?.firstName || "Friend"}!
         </span>
-        <UserButton 
+        <UserButton
           appearance={{
             elements: {
               avatarBox: "w-8 h-8",
