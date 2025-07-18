@@ -8,13 +8,13 @@ import { SignOutButton, useClerk } from "@clerk/clerk-react";
 import {  UserButton } from '@clerk/clerk-react';
 import axiosInstance from "@/lib/axios";
 import { useEffect } from "react";
-
+import { useUser } from "@clerk/clerk-react";
 const Home = () => {
   const navigate = useNavigate();
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const { signOut } = useClerk();
-
+  const { user } = useUser();
 
 
   useEffect(() => {
@@ -122,7 +122,7 @@ const Home = () => {
                     </div>
                     <div>
                       <h1 className="text-4xl font-display text-wellness mb-2">
-                        Good afternoon! 👋
+                        Good Afternoon {user?.firstName}!  👋
                       </h1>
                       <p className="text-muted-foreground text-lg font-body">
                         Ready to check in with yourself today?
@@ -150,7 +150,7 @@ const Home = () => {
                         key={mood.value}
                         onClick={() => handleMoodSelect(mood.value)}
                         disabled={isAnimating}
-                        className={`mood-bubble aspect-square flex flex-col items-center justify-center gap-4 p-6 relative overflow-hidden transition-all duration-500 ${
+                        className={`mood-bubble rounded-3xl py-3 flex flex-col items-center justify-center gap-4 p-3 relative overflow-hidden transition-all duration-500 ${
                           selectedMood === mood.value ? 'selected' : ''
                         } ${mood.shadowColor}`}
                         style={{
@@ -186,11 +186,11 @@ const Home = () => {
                   <Button
                     variant="outline"
                     onClick={() => navigate("/chat")}
-                    className="h-32 wellness-card border-2 hover:border-primary/30 interactive-element group p-8"
+                    className="h-fit wellness-card border-2 hover:border-primary/30 interactive-element group p-8 py-5"
                   >
                     <div className="flex flex-col items-center gap-4">
                       <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center group-hover:scale-110 transition-transform shadow-wellness">
-                        <MessageCircle className="w-8 h-8 text-white" />
+                        <MessageCircle className="h-10 w-10 text-white" />
                       </div>
                       <div className="text-center">
                         <span className="text-lg font-heading text-foreground block">Chat Therapy</span>
@@ -202,7 +202,7 @@ const Home = () => {
                   <Button
                     variant="outline"
                     onClick={() => navigate("/mood-tracker")}
-                    className="h-32 wellness-card border-2 hover:border-secondary/30 interactive-element group p-8"
+                    className="h-fit wellness-card border-2 hover:border-secondary/30 interactive-element group p-8 py-5"
                   >
                     <div className="flex flex-col items-center gap-4">
                       <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-secondary to-secondary/80 flex items-center justify-center group-hover:scale-110 transition-transform shadow-calm">
@@ -250,7 +250,7 @@ const Home = () => {
                     </div>
 
                     <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-1">
                         <span className="text-muted-foreground font-body">Streak:</span>
                         <span className="font-heading text-primary">3 days</span>
                         <span className="text-lg animate-bounce-subtle">🔥</span>
@@ -330,7 +330,7 @@ const Home = () => {
                     key={mood.value}
                     onClick={() => handleMoodSelect(mood.value)}
                     disabled={isAnimating}
-                    className={`mood-bubble aspect-square flex flex-col items-center justify-center gap-2 relative overflow-hidden ${
+                    className={`mood-bubble rounded-3xl py-3 flex flex-col items-center justify-center gap-2 relative overflow-hidden ${
                       selectedMood === mood.value ? 'selected' : ''
                     } ${mood.shadowColor}`}
                     style={{

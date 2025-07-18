@@ -130,12 +130,12 @@ const Welcome = () => {
                   </Button>
                 </SignUpButton>
 
-                <SignInButton fallbackRedirectUrl="/home">
+                {/* <SignInButton fallbackRedirectUrl="/home">
                   <Button variant="outline" className="w-full h-12 text-base font-heading border-primary/30 hover:bg-primary/5 hover:border-primary/50 transition-all duration-300">
                     <Mail className="w-4 h-4 mr-2" />
                     Sign In to Continue
                   </Button>
-                </SignInButton>
+                </SignInButton> */}
               </div>
             </div>
 

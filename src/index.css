@@ -69,7 +69,7 @@
   * {
     @apply border-border;
   }
-  
+
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
@@ -98,34 +98,34 @@
 
 /* Enhanced animations for emotional engagement */
 @keyframes float-gentle {
-  0%, 100% { 
-    transform: translateY(0px) rotate(0deg); 
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
   }
-  33% { 
-    transform: translateY(-8px) rotate(0.5deg); 
+  33% {
+    transform: translateY(-8px) rotate(0.5deg);
   }
-  66% { 
-    transform: translateY(-4px) rotate(-0.5deg); 
+  66% {
+    transform: translateY(-4px) rotate(-0.5deg);
   }
 }
 
 @keyframes pulse-soft {
-  0%, 100% { 
+  0%, 100% {
     opacity: 1;
     transform: scale(1);
   }
-  50% { 
+  50% {
     opacity: 0.95;
     transform: scale(1.02);
   }
 }
 
 @keyframes bounce-subtle {
-  0%, 100% { 
-    transform: translateY(0px) scale(1); 
+  0%, 100% {
+    transform: translateY(0px) scale(1);
   }
-  50% { 
-    transform: translateY(-4px) scale(1.01); 
+  50% {
+    transform: translateY(-4px) scale(1.01);
   }
 }
 
@@ -202,30 +202,30 @@
 
 /* Enhanced gradient backgrounds */
 .bg-gradient-serenity {
-  background: linear-gradient(135deg, 
-    hsl(340, 75%, 96%) 0%, 
-    hsl(200, 85%, 96%) 50%, 
+  background: linear-gradient(135deg,
+    hsl(340, 75%, 96%) 0%,
+    hsl(200, 85%, 96%) 50%,
     hsl(45, 88%, 96%) 100%);
 }
 
 .bg-gradient-wellness {
-  background: linear-gradient(135deg, 
-    hsl(340, 40%, 98%) 0%, 
-    hsl(200, 60%, 98%) 50%, 
+  background: linear-gradient(135deg,
+    hsl(340, 40%, 98%) 0%,
+    hsl(200, 60%, 98%) 50%,
     hsl(142, 40%, 98%) 100%);
 }
 
 .bg-gradient-calm {
-  background: radial-gradient(ellipse at top, 
-    hsl(200, 85%, 97%) 0%, 
-    hsl(340, 30%, 99%) 50%, 
+  background: radial-gradient(ellipse at top,
+    hsl(200, 85%, 97%) 0%,
+    hsl(340, 30%, 99%) 50%,
     hsl(0, 0%, 100%) 100%);
 }
 
 .bg-gradient-joy {
-  background: linear-gradient(135deg, 
-    hsl(45, 88%, 97%) 0%, 
-    hsl(340, 50%, 98%) 50%, 
+  background: linear-gradient(135deg,
+    hsl(45, 88%, 97%) 0%,
+    hsl(340, 50%, 98%) 50%,
     hsl(200, 40%, 99%) 100%);
 }
 
@@ -233,8 +233,8 @@
 .mood-bubble {
   @apply relative overflow-hidden transition-all duration-500 ease-out;
   @apply hover:scale-110 active:scale-95;
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.95) 0%, 
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.95) 0%,
     rgba(255, 255, 255, 0.8) 100%);
   backdrop-filter: blur(20px);
   border: 2px solid rgba(255, 255, 255, 0.4);
@@ -242,16 +242,16 @@
 }
 
 .mood-bubble:hover {
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 1) 0%, 
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 1) 0%,
     rgba(255, 255, 255, 0.95) 100%);
   border-color: rgba(232, 90, 154, 0.3);
   box-shadow: 0 12px 40px rgba(232, 90, 154, 0.15);
 }
 
 .mood-bubble.selected {
-  background: linear-gradient(135deg, 
-    hsl(340, 75%, 96%) 0%, 
+  background: linear-gradient(135deg,
+    hsl(340, 75%, 96%) 0%,
     hsl(340, 75%, 98%) 100%);
   border-color: hsl(340, 75%, 70%);
   transform: scale(1.15);
@@ -298,9 +298,9 @@
 /* Enhanced progress bars */
 .progress-wellness {
   @apply relative overflow-hidden;
-  background: linear-gradient(90deg, 
-    hsl(340, 75%, 70%) 0%, 
-    hsl(200, 85%, 65%) 50%, 
+  background: linear-gradient(90deg,
+    hsl(340, 75%, 70%) 0%,
+    hsl(200, 85%, 65%) 50%,
     hsl(142, 65%, 55%) 100%);
   border-radius: 50px;
 }
@@ -351,17 +351,17 @@
 /* Responsive desktop adaptations */
 @media (min-width: 768px) {
   .desktop-layout {
-    @apply max-w-4xl mx-auto;
+    @apply max-w-6xl mx-auto;
   }
-  
+
   .desktop-grid {
     @apply grid grid-cols-12 gap-8;
   }
-  
+
   .desktop-main {
     @apply col-span-8;
   }
-  
+
   .desktop-sidebar {
     @apply col-span-4;
   }
