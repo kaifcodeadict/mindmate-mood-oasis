@@ -10,7 +10,7 @@ interface TaskCardProps {
     id: string;
     title: string;
     description: string;
-    type: 'breathing' | 'journaling' | 'mindfulness' | 'movement';
+    type: 'breathing' | 'journaling' | 'mindfulness' | 'movement' | 'creative' | 'mental';
     status: 'pending' | 'in-progress' | 'completed';
     emoji: string;
     estimatedTime: string;

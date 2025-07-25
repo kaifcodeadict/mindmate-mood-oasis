@@ -13,7 +13,7 @@ const StreakCounter = ({ taskStreak, moodStreak, weeklyGoal, weeklyProgress }: S
   const streakCards = [
     {
       icon: Flame,
-      title: "Task Streak",
+      title: "Steps Streak",
       value: taskStreak,
       suffix: "days",
       color: "from-orange-400 to-red-400",
@@ -23,7 +23,7 @@ const StreakCounter = ({ taskStreak, moodStreak, weeklyGoal, weeklyProgress }: S
       icon: Sprout,
       title: "Mood Check-ins",
       value: moodStreak,
-      suffix: "days",
+      suffix: "Times",
       color: "from-green-400 to-emerald-400",
       bgColor: "from-green-50 to-emerald-50"
     },
@@ -42,7 +42,7 @@ const StreakCounter = ({ taskStreak, moodStreak, weeklyGoal, weeklyProgress }: S
       {streakCards.map((card, index) => {
         const Icon = card.icon;
         return (
-          <Card 
+          <Card
             key={index}
             className={`p-4 text-center bg-gradient-to-br ${card.bgColor} border-0 relative overflow-hidden`}
           >
@@ -56,7 +56,7 @@ const StreakCounter = ({ taskStreak, moodStreak, weeklyGoal, weeklyProgress }: S
               </div>
               <p className="text-xs text-muted-foreground mt-1">{card.title}</p>
             </div>
-            
+
             {/* Animated background element */}
             <div className={`absolute -top-4 -right-4 w-16 h-16 rounded-full bg-gradient-to-br ${card.color} opacity-10 animate-pulse-soft`}></div>
           </Card>
