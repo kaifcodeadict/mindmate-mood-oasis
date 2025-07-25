@@ -178,8 +178,8 @@ const Home = () => {
                     className="h-fit wellness-card border-2 hover:border-primary/30 interactive-element group p-8 py-5"
                   >
                     <div className="flex flex-col items-center gap-4">
-                      <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center group-hover:scale-110 transition-transform shadow-wellness">
-                        <MessageCircle className="h-10 w-10 text-white" />
+                      <div className=" p-4 rounded-3xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center group-hover:scale-110 transition-transform shadow-wellness">
+                        <MessageCircle style={{width: "1.5rem", height: "1.5rem"}} className=" text-white" />
                       </div>
                       <div className="text-center">
                         <span className="text-lg font-heading text-foreground block">Chat Therapy</span>
@@ -194,8 +194,8 @@ const Home = () => {
                     className="h-fit wellness-card border-2 hover:border-secondary/30 interactive-element group p-8 py-5"
                   >
                     <div className="flex flex-col items-center gap-4">
-                      <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-secondary to-secondary/80 flex items-center justify-center group-hover:scale-110 transition-transform shadow-calm">
-                        <TrendingUp className="w-8 h-8 text-white" />
+                      <div className="p-4 rounded-3xl bg-gradient-to-br from-secondary to-secondary/80 flex items-center justify-center group-hover:scale-110 transition-transform shadow-calm">
+                        <TrendingUp style={{width: "1.5rem", height: "1.5rem"}} className=" text-white" />
                       </div>
                       <div className="text-center">
                         <span className="text-lg font-heading text-foreground block">Mood Garden</span>

@@ -14,6 +14,7 @@ interface TaskCardProps {
     status: 'pending' | 'in-progress' | 'completed';
     emoji: string;
     estimatedTime: string;
+    steps?: { label: string; }[];
   };
   onStatusChange: (id: string, status: 'pending' | 'in-progress' | 'completed') => void;
 }
@@ -47,29 +48,37 @@ const TaskCard = ({ task, onStatusChange }: TaskCardProps) => {
   };
 
   return (
-    <Card className="p-4 bg-gradient-to-br from-card to-muted/20 border-primary/10 hover:border-primary/20 transition-all duration-300 hover:shadow-wellness">
+    <Card
+      className={`w-fit p-4  from-card to-muted/20 border-primary/10 hover:border-primary/20 transition-all duration-300 hover:shadow-wellness ${task.status === 'completed' ? 'bg-primary text-white' : ''}`}
+    >
       <div className="space-y-3">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center text-xl">
+            <div className={`w-12 h-12 rounded-2xl   from-primary/20 to-secondary/20 flex items-center justify-center text-xl ${task.status === 'completed' ? 'bg-background text-white' : 'bg-gradient-to-tr'}`}>
               {task.emoji}
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-foreground">{task.title}</h3>
-              <p className="text-sm text-muted-foreground">{task.estimatedTime}</p>
+              <h3 className={`font-semibold ${task.status === 'completed' ? 'text-white' : 'text-foreground'}`}>{task.title}</h3>
+              <p className={`text-sm ${task.status === 'completed' ? 'text-white/80' : 'text-muted-foreground'}`}>{task.estimatedTime}</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 ml-4">
             {getStatusIcon()}
           </div>
         </div>
+        {task.steps && task.steps.length > 0 && (
+          <div className="flex gap-2 flex-col">
+            {task.steps.map((step: any, idx: number) => (
+              <h3 key={idx} className={`text-sm leading-relaxed ${task.status === 'completed' ? 'text-white/90' : 'text-muted-foreground'}`}>
+                <span className={`${task.status === 'completed' ? 'text-white' : 'text-primary'}`}>•</span> {step.label}
+              </h3>
+            ))}
+          </div>
+        )}
 
-        <p className="text-sm text-muted-foreground leading-relaxed">
-          {task.description}
-        </p>
 
         {task.status === 'pending' && (
-          <Button 
+          <Button
             onClick={handleStart}
             className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white rounded-2xl"
           >
@@ -79,11 +88,8 @@ const TaskCard = ({ task, onStatusChange }: TaskCardProps) => {
 
         {task.status === 'in-progress' && (
           <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <Progress value={75} className="flex-1" />
-              <span className="text-xs text-muted-foreground">75%</span>
-            </div>
-            <Button 
+
+            <Button
               onClick={handleComplete}
               className="w-full bg-gradient-to-r from-success/80 to-success hover:from-success hover:to-success/90 text-white rounded-2xl"
             >

@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import axios from "@/lib/axios";
 import { Check, Heart } from "lucide-react";
+import { useAuth } from "@clerk/clerk-react";
 
 const QUESTIONS = [
   {
@@ -121,6 +122,7 @@ const Onboarding: React.FC = () => {
     setAnswers((prev) => ({ ...prev, [step.key]: value }));
   };
 
+  const { getToken } = useAuth();
   const handleContinue = async () => {
     setSubmitting(true);
     setError("");
@@ -129,10 +131,11 @@ const Onboarding: React.FC = () => {
       if (step.type === "multi") responseVal = answers[step.key as keyof typeof answers];
       else if (step.type === "single") responseVal = [answers[step.key as keyof typeof answers]];
       else responseVal = answers[step.key as keyof typeof answers] ? [answers[step.key as keyof typeof answers]] : [];
-      await axios.post("/onboarding", {
+      const token = await getToken();
+      await axios.post("/onboarding/", {
         question: step.question,
         response: responseVal,
-      });
+      }, { headers: { Authorization: `Bearer ${token}` } });
       if (currentStep === totalSteps - 1) {
         localStorage.setItem("onboardingComplete", "true");
         setShowCompletion(true);

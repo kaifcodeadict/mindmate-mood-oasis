@@ -17,13 +17,14 @@ const Welcome = () => {
 
   const saveData = async () => {
     try {
-      await axiosInstance.post("/auth/sync-user");
+      const token = await getToken();
+      await axiosInstance.post("/auth/sync-user",{}, { headers: { Authorization: `Bearer ${token}` } });
       // Optionally handle response
       navigate("/onboarding");
       // navigate("/home");
     } catch (error) {
       // Optionally handle error
-      alert("Error syncing user");
+      alert("Error syncing user" + error);
       navigate("/");
     } finally {
       setLoading(false);
@@ -33,17 +34,17 @@ const Welcome = () => {
   useEffect(() => {
     const handleAuth = async () => {
       if (isLoaded && isSignedIn) {
-        // Fetch and store the latest token
-        const token = await getToken();
-        if (token) {
-          localStorage.setItem("clerkToken", token);
-        }
+        // // Fetch and store the latest token
+        // const token = await getToken();
+        // if (token) {
+        //   localStorage.setItem("clerkToken", token);
+        // }
         setLoading(true);
-        setTimeout(() => {
           saveData();
-        }, 500);
       } else {
-        localStorage.removeItem("clerkToken");
+        // localStorage.removeItem("clerkToken");
+        setLoading(false);
+
       }
     };
     handleAuth();
