@@ -12,6 +12,7 @@ import MoodChart from "@/components/MoodChart";
 import StreakCounter from "@/components/StreakCounter";
 import EmotionalSummary from "@/components/EmotionalSummary";
 
+
 interface Task {
   id: string;
   title: string;
@@ -228,6 +229,8 @@ const MoodTracker = () => {
       </div>
     );
   }
+
+
 
   return (
     <div className="min-h-screen bg-gradient-wellness">

@@ -3,10 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Check, Crown, MessageSquare, BarChart3, Heart, Sparkles, Calendar, Star, Zap } from "lucide-react";
+import { createOrder, initializePayment, verifyPayment } from "@/lib/paywall";
+import { useAuth } from "@clerk/clerk-react";
 
 const Premium = () => {
+  const { getToken } = useAuth();
   const navigate = useNavigate();
-  
+
   const features = [
     {
       icon: MessageSquare,
@@ -41,39 +44,55 @@ const Premium = () => {
   ];
 
   const handleUpgrade = () => {
-    // This would integrate with Stripe/Razorpay
-    console.log("Upgrade to premium");
-    // For demo, just navigate back
-    navigate("/home");
+    const paywall = async () => {
+      try {
+        // Create order for premium subscription (₹99 = 9900 paise)
+        const order = await createOrder(99, 'INR', getToken);
+        console.log("order",order);
+        // Initialize payment
+        initializePayment(
+          order,
+          async (response) => {
+            // Verify payment on server
+            const isVerified = await verifyPayment(response, getToken);
+            if (isVerified) {
+              // Payment successful - handle premium activation
+              console.log('Payment successful!');
+              // You can add logic here to update user's premium status
+              // For example, navigate to a success page or show a success message
+            } else {
+              console.error('Payment verification failed');
+              // Handle payment verification failure
+            }
+          },
+          (error) => {
+            console.error('Payment failed:', error);
+            // Handle payment error
+          }
+        );
+      } catch (error) {
+        console.error('Failed to initialize payment:', error);
+        // Handle order creation error
+      }
+    };
+    paywall();
   };
 
   return (
     <div className="min-h-screen bg-gradient-joy relative overflow-hidden">
-      {/* Floating background elements */}
-      <div className="floating-shape top-16 right-12 animate-float">
-        <Crown className="w-8 h-8 text-accent/30" />
-      </div>
-      <div className="floating-shape top-32 left-8 animate-float" style={{ animationDelay: '1s' }}>
-        <Sparkles className="w-6 h-6 text-primary/25" />
-      </div>
-      <div className="floating-shape bottom-40 right-16 animate-float" style={{ animationDelay: '2s' }}>
-        <Star className="w-7 h-7 text-secondary/20" />
-      </div>
-      <div className="floating-shape bottom-32 left-12 animate-float" style={{ animationDelay: '0.5s' }}>
-        <Heart className="w-9 h-9 text-primary/15" fill="currentColor" />
-      </div>
+
 
       {/* Enhanced Header */}
       <div className="bg-card/95 backdrop-blur-lg border-b border-border/50 p-4 flex items-center gap-3 shadow-soft">
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           size="icon"
           onClick={() => navigate(-1)}
-          className="rounded-full hover:bg-primary/10 interactive"
+          className="rounded-full hover:bg-primary interactive"
         >
           <ArrowLeft className="w-5 h-5" />
         </Button>
-        
+
         <div>
           <div className="flex items-center gap-2">
             <Crown className="w-5 h-5 text-accent" />
@@ -97,7 +116,7 @@ const Premium = () => {
             <Sparkles className="absolute -top-2 -right-2 w-6 h-6 text-accent animate-bounce-gentle" />
             <Star className="absolute -bottom-2 -left-2 w-5 h-5 text-primary animate-wiggle" />
           </div>
-          
+
           <div className="space-y-3">
             <h1 className="text-3xl text-display text-warm">
               Upgrade to Premium
@@ -114,7 +133,7 @@ const Premium = () => {
           <div className="absolute top-4 right-4">
             <Zap className="w-6 h-6 text-accent/40 animate-pulse" />
           </div>
-          
+
           <div className="text-center space-y-6">
             <div className="space-y-2">
               <div className="flex items-center justify-center gap-3">
@@ -125,7 +144,7 @@ const Premium = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="bg-gradient-to-r from-accent/20 via-accent/10 to-primary/20 rounded-3xl p-4 border border-accent/30">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <Sparkles className="w-5 h-5 text-accent animate-bounce-gentle" />
@@ -145,14 +164,14 @@ const Premium = () => {
             <h3 className="text-heading font-semibold text-foreground">What you'll unlock:</h3>
             <p className="text-sm text-muted-foreground">Every feature designed with love for your wellbeing</p>
           </div>
-          
+
           {features.map((feature, index) => (
             <Card key={index} className="p-5 hover:shadow-warm transition-all duration-300 interactive border-l-4 border-l-primary/30">
               <div className="flex items-start gap-4">
                 <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center flex-shrink-0 animate-bounce-gentle`} style={{ animationDelay: `${index * 0.1}s` }}>
                   <feature.icon className="w-6 h-6 text-primary" />
                 </div>
-                
+
                 <div className="flex-1 space-y-2">
                   <div className="flex items-center gap-3">
                     <h4 className="font-semibold text-foreground">{feature.title}</h4>
@@ -171,7 +190,7 @@ const Premium = () => {
         <Card className="p-6 bg-gradient-to-br from-muted/30 to-muted/10 border border-muted shadow-soft">
           <div className="space-y-4">
             <h3 className="text-heading font-semibold text-foreground text-center">Your journey so far:</h3>
-            
+
             <div className="grid grid-cols-2 gap-6 text-center">
               <div className="space-y-3">
                 <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-muted to-muted/60 flex items-center justify-center">
@@ -184,7 +203,7 @@ const Premium = () => {
                   <p>• Weekly insights</p>
                 </div>
               </div>
-              
+
               <div className="space-y-3">
                 <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center animate-pulse-glow">
                   <Crown className="w-8 h-8 text-white" />
@@ -202,7 +221,7 @@ const Premium = () => {
 
         {/* Enhanced CTA Buttons */}
         <div className="space-y-4 pt-4">
-          <Button 
+          <Button
             onClick={handleUpgrade}
             className="w-full bg-gradient-to-r from-primary via-accent to-secondary hover:from-primary/90 hover:via-accent/90 hover:to-secondary/90 text-white rounded-3xl py-7 text-lg font-bold shadow-warm transition-all duration-300 hover:shadow-xl hover:scale-[1.02] interactive"
           >
@@ -210,12 +229,12 @@ const Premium = () => {
             Start 7-Day Free Trial
             <Sparkles className="w-6 h-6 ml-3 animate-bounce-gentle" />
           </Button>
-          
+
           <div className="text-center space-y-3">
             <p className="text-xs text-muted-foreground">
               Cancel anytime • No commitment • Your data stays safe
             </p>
-            <button 
+            <button
               onClick={() => navigate(-1)}
               className="text-sm text-muted-foreground hover:text-primary transition-colors font-medium hover:scale-105 transform duration-200"
             >
