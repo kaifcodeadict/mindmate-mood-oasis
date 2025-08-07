@@ -2,7 +2,7 @@ import axios from "axios";
 
 const instance = axios.create({
   baseURL: process.env.NODE_ENV === "production"
-    ? "https://your-production-api-url.com/api"
+    ? "https://mindmate-backend-8wck.onrender.com/api"
     : "http://localhost:5000/api",
   timeout: 10000,
   headers: {
