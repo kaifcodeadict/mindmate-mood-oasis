@@ -3,13 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ArrowLeft, Send, Heart, Sparkles, Smile, Brain, Mic } from "lucide-react";
+import { ArrowLeft, Send, Heart, Sparkles, Smile, Brain, Mic, Menu } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import axios from "@/lib/axios";
 import { useAuth } from "@clerk/clerk-react";
 import TaskCard from "@/components/TaskCard";
 import ChatHistoryList, { mapApiHistoryToSessions } from "@/components/ChatHistoryList";
 import { Confetti } from "@/components/magicui/confetti";
+import Drawer from 'react-modern-drawer'
+import { useIsMobile } from "@/hooks/use-mobile";
+//import styles 👇
+import 'react-modern-drawer/dist/index.css'
 interface Message {
   id: string;
   text: string;
@@ -37,7 +41,12 @@ const Chat = () => {
   const [historyLoading, setHistoryLoading] = useState(true);
   const [sessionLoading, setSessionLoading] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
-
+  const [isOpen, setIsOpen] = useState(false)
+  const toggleDrawer = () => {
+    if(isMobile){
+      setIsOpen((prevState) => !prevState)
+    }
+  }
   useEffect(() => {
     const fetchHistory = async () => {
       setHistoryLoading(true);
@@ -66,7 +75,7 @@ const Chat = () => {
     setTaskData(null);
     setShowTask(false);
     setSelectedSessionId(null);
-
+    toggleDrawer()
     const getInitialMessage = () => {
       const greetings = {
         happy: "I can feel your positive energy! 😊✨ What's bringing you joy today? I'd love to hear about it!",
@@ -264,24 +273,53 @@ const Chat = () => {
       setTaskLoading(false);
     }
   };
+  const isMobile = useIsMobile();
 
   return (
+    <>
+                  <Drawer
+                open={isOpen}
+                onClose={toggleDrawer}
+                direction="left"
+                style={{ width: "80%" }}
+
+            >
+                  <div className=" w-full flex-shrink-0  border-r-2 ">
+          <ChatHistoryList
+            sessions={chatHistory}
+            resetSession={resetSession}
+            selectedId={selectedSessionId || sessionId || undefined}
+            onSelect={(id) => {setSessionId(id)
+
+              toggleDrawer()
+
+            }}
+          />
+        {historyLoading && <div className="text-center text-xs text-muted-foreground mt-4">Loading chat history...</div>}
+        </div>
+            </Drawer>
     <div className="flex flex-row  max-h-screen overflow-y-hidden  ">
+
       {showConfetti && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <Confetti particleCount={120} spread={90} />
         </div>
       )}
           {/* Chat History Section */}
-          <div className=" w-1/4 flex-shrink-0  border-r-2 ">
+     { !isMobile &&     <div className=" w-1/4 flex-shrink-0  border-r-2 ">
           <ChatHistoryList
             sessions={chatHistory}
             resetSession={resetSession}
             selectedId={selectedSessionId || sessionId || undefined}
-            onSelect={(id) => setSessionId(id)}
+            onSelect={(id) =>{
+
+              setSessionId(id)
+            }}
           />
         {historyLoading && <div className="text-center text-xs text-muted-foreground mt-4">Loading chat history...</div>}
-        </div>
+        </div>}
+
+
     <div className=" bg-gradient-serenity flex flex-col relative overflow-hidden  h-screen max-h-screen w-full ">
 
 
@@ -312,11 +350,19 @@ const Chat = () => {
             <p className="text-xs text-muted-foreground">Your caring AI companion • Always here</p>
           </div>
         </div>
-
-        <div className="flex items-center gap-1">
+        { !isMobile ?  <div className="flex items-center gap-1">
           <Smile className="w-4 h-4 text-primary animate-pulse" />
           <span className="text-xs text-primary font-medium">Online</span>
-        </div>
+        </div> :
+        <div className="flex items-center gap-1">
+        <button  className="button   z-50" onClick={toggleDrawer}>
+
+          <Menu className="w-6 h-6 text-black animate-pulse" />
+        </button>
+          </div>
+        }
+
+
       </div>
       {sessionLoading && (
           <div className=" w-full text-center text-xs text-muted-foreground  flex-1 bg-gradient-serenity p-4 space-y-6 pb-32">Loading session...</div>
@@ -439,6 +485,8 @@ const Chat = () => {
       </div>
     </div>
     </div>
+    </>
+
 
   );
 };

@@ -165,7 +165,7 @@ const Onboarding: React.FC = () => {
 
   // Progress bar (dots)
   const renderProgress = () => (
-    <div className="flex items-center justify-center gap-2 mb-6">
+    <div className="pt-8 px-8 sm:p-0 flex items-center justify-center gap-2 mb-6">
       {QUESTIONS.map((_, idx) => (
         <span
           key={idx}
@@ -237,15 +237,17 @@ const Onboarding: React.FC = () => {
       >
         Skip for now
       </button>
-      <Card className="w-full max-w-2xl p-8 shadow-xl bg-background/90 animate-fade-in-up">
+      <Card className="w-full max-w-2xl p-0 sm:p-8  shadow-xl bg-background/90 animate-fade-in-up">
         {renderProgress()}
         <div className={`transition-all duration-500 ${getAnimClass()}`} key={step.key}>
-          <Label className="font-medium text-2xl text-foreground block mb-6 text-center">
+          <Label className="px-8 sm:p-0 font-medium text-xl sm:text-2xl text-foreground block mb-6 text-center">
             {step.question}
           </Label>
           {/* Options */}
           {step.type === "multi" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2 mb-6">
+            <div className="overflow-x-auto sm:overflow-x-hidden ">
+
+            <div className=" px-8 sm:p-0 scroll-x grid grid-cols-5 sm:grid-cols-2 gap-4 mt-2 mb-6 sm:mx-2">
               {step.options.map((opt) => (
                 <OptionCard
                   key={opt}
@@ -256,9 +258,12 @@ const Onboarding: React.FC = () => {
                 />
               ))}
             </div>
+            </div>
+
           )}
           {step.type === "single" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2 mb-6">
+                  <div className="overflow-x-auto sm:overflow-x-hidden">
+            <div className="px-8 sm:p-0 scroll-x grid grid-cols-3 sm:grid-cols-2 gap-4 mt-2 mb-6 sm:mx-2">
               {step.options.map((opt) => (
                 <OptionCard
                   key={opt}
@@ -268,19 +273,22 @@ const Onboarding: React.FC = () => {
                 />
               ))}
             </div>
+            </div>
           )}
           {step.type === "text" && (
+            <div className="px-4 sm:p-0">
             <Textarea
               value={answers[step.key as keyof typeof answers] as string}
               onChange={(e) => handleTextChange(e.target.value)}
               placeholder={step.placeholder}
               className="mt-2 mb-6"
-              maxLength={200}
-            />
+                maxLength={200}
+              />
+            </div>
           )}
         </div>
         {error && <div className="text-destructive text-sm text-center mb-2">{error}</div>}
-        <div className="flex flex-row justify-between items-center mt-8 gap-4">
+        <div className="p-8 sm:p-0 flex flex-row justify-between items-center mt-8 gap-4">
           <Button
             type="button"
             variant="ghost"

@@ -376,6 +376,11 @@
     @apply max-w-6xl mx-auto px-8;
   }
 }
+@media (max-width: 768px) {
+  .scroll-x {
+    width: max-content;
+  }
+}
 
 /* Animated shadow for chat input on focus */
 .input-animated-shadow {

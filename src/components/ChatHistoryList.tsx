@@ -30,7 +30,7 @@ const ChatHistoryList = ({
   const navigate = useNavigate();
 
   return (
-    <div className="w-full max-w-md mx-auto  max-h-full flex flex-col relative">
+    <div className="w-full max-w-md mx-auto max-h-screen  md:max-h-full flex flex-col relative">
       {/* Header - glassy and sticky */}
       <div className="flex items-center gap-3  sticky top-0 z-20 bg-card/80 backdrop-blur-sm border-b border-border/50 px-2 py-3 rounded-b-xl shadow-soft">
         <Button

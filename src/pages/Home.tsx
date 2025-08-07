@@ -271,8 +271,8 @@ const Home = () => {
                       className="w-full wellness-card p-4 text-left interactive-element group"
                     >
                       <div className="flex items-center gap-3">
-                        <BookOpen className="w-5 h-5 text-accent group-hover:scale-110 transition-transform" />
-                        <span className="font-body text-foreground">Daily reflections</span>
+                        <Settings className="w-5 h-5 text-accent group-hover:scale-110 transition-transform" />
+                        <span className="font-body text-foreground">Settings</span>
                       </div>
                     </button>
                   </div>

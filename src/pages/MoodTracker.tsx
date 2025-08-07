@@ -134,15 +134,7 @@ const MoodTracker = () => {
     value: item.percentage
   })) || [];
 
-  const [dailyTask, setDailyTask] = useState<Task>({
-    id: '1',
-    title: 'Mindful Breathing',
-    description: 'Take 5 minutes to practice deep breathing. Focus on your breath and let go of any tension.',
-    type: 'breathing',
-    status: 'pending',
-    emoji: '🌸',
-    estimatedTime: '5 minutes'
-  });
+    const [dailyTask, setDailyTask] = useState<Task>();
 
   // Update daily task when analytics data is loaded
   useEffect(() => {
@@ -267,7 +259,7 @@ const MoodTracker = () => {
         </div>
 
         {/* Daily Task Section */}
-        <div className="space-y-4">
+   {dailyTask &&     <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-foreground">Today's Wellness Task</h3>
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -276,7 +268,7 @@ const MoodTracker = () => {
             </div>
           </div>
           <TaskCard task={dailyTask} onStatusChange={handleTaskStatusChange} />
-        </div>
+        </div>}
 
         {/* Weekly Progress */}
         {/* <Card className="p-6 bg-gradient-to-r from-primary/10 to-secondary/10 border-primary/20 relative overflow-hidden">
@@ -363,31 +355,7 @@ const MoodTracker = () => {
           </div>
         </Card>
 
-        {/* Calendar View - Premium Feature */}
-        <Card className="p-6 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-muted/30 to-muted/10" />
-          <div className="relative z-10 space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <CalendarIcon className="w-5 h-5 text-muted-foreground" />
-                <h3 className="font-semibold text-foreground">Monthly Mood Calendar</h3>
-              </div>
-              <Lock className="w-4 h-4 text-muted-foreground" />
-            </div>
 
-            <p className="text-sm text-muted-foreground">
-              View your complete mood history with calendar insights, patterns, and detailed analytics.
-            </p>
-
-            <Button
-              onClick={() => navigate("/premium")}
-              className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white rounded-2xl"
-            >
-              <Sparkles className="w-4 h-4 mr-2" />
-              Unlock Premium Calendar
-            </Button>
-          </div>
-        </Card>
       </div>
     </div>
   );
